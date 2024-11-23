@@ -72,7 +72,9 @@
                         try
                         {
                             Console.Write("Quantidade em estoque: ");
-                            quantidadeEstoque = Convert.ToDouble(Console.ReadLine());
+                            string valorDigitado = Console.ReadLine();
+                            string valorCorreto = valorDigitado.Replace(".", ",");
+                            quantidadeEstoque = Convert.ToDouble(valorCorreto);
                             quantidadeCorreta = true;
                         }
                         catch (Exception)
@@ -83,8 +85,26 @@
                     }
                     while (!quantidadeCorreta);
 
-                    Console.Write("Preço: ");
-                    double preco = Convert.ToDouble(Console.ReadLine());
+                    double preco = 0;
+                    bool precoCorreto = false;
+
+                    do
+                    {
+                        try
+                        {
+                            Console.Write("Preco: ");
+                            string valorDigitado = Console.ReadLine();
+                            string valorCorreto = valorDigitado.Replace(".", ",");
+                            preco = Convert.ToDouble(valorCorreto);
+                            precoCorreto = true;
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine($"O preco digitado não é um número válido. Pressione qualquer tecla para continuar.");
+                            Console.ReadLine();
+                        }
+                    }
+                    while (!precoCorreto);
 
                     Console.WriteLine($"O Mangá {nome} do autor {autor} com quantidade em " +
                         $"estoque {quantidadeEstoque} e preço {preco} foi cadastrado " +
