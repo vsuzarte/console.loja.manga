@@ -1,10 +1,11 @@
-﻿public class Program
+﻿using System.Drawing;
+
+public class Program
 {
     private static void Main(string[] args)
     {
         bool finalizarSistema = false;
 
-        //Enquanto for true, ele continua executando
         while (!finalizarSistema) {
             Console.Clear();
             Console.WriteLine("=========================================");
@@ -14,7 +15,7 @@
             Console.WriteLine("0. Sair");
             Console.WriteLine("=========================================");
             Console.Write("Escolha uma opção: ");
-            string opcao = Console.ReadLine();
+            string opcao = Console.ReadLine() ?? string.Empty;
 
             switch (opcao)
             {
@@ -48,7 +49,7 @@
             Console.WriteLine("0. Sair");
             Console.WriteLine("=========================================");
             Console.Write("Escolha uma opção: ");
-            string opcao = Console.ReadLine();
+            string opcao = Console.ReadLine() ?? string.Empty;
 
             switch (opcao)
             {
@@ -58,12 +59,10 @@
                     Console.WriteLine("                Cadastro                 ");
                     Console.WriteLine("=========================================");
 
-                    Console.Write("Digite o nome do mangá: ");
-                    string nome = Console.ReadLine();
+                    string nome = SolicitarValorTextual("Digite o nome do mangá: ");
 
-                    Console.Write("Digite o nome do autor: ");
-                    string autor = Console.ReadLine();
-                    
+                    string autor = SolicitarValorTextual("Digite o nome do autor: ");
+
                     double quantidadeEstoque = SolicitarValorDecimal("Digite a Quantidade de Estoque: ");
 
                     double preco = SolicitarValorDecimal("Digite o preço: ");
@@ -96,7 +95,7 @@
             try
             {
                 Console.Write(texto);
-                string valorDigitado = Console.ReadLine();
+                string valorDigitado = Console.ReadLine() ?? string.Empty;
                 string valorCorreto = valorDigitado.Replace(".", ",");
                 valor = Convert.ToDouble(valorCorreto);
                 valorValidado = true;
@@ -105,6 +104,31 @@
             {
                 Console.WriteLine($"O valor digitado não é um número decimal válido. Pressione qualquer tecla para tentar novamente.");
                 Console.ReadLine();
+            }
+        }
+        while (!valorValidado);
+
+        return valor;
+    }
+
+    private static string SolicitarValorTextual(string texto)
+    {
+        bool valorValidado = false;
+        string valor = "";
+
+        do
+        {
+            Console.Write(texto);
+            valor = Console.ReadLine() ?? string.Empty;
+
+            if (string.IsNullOrEmpty(valor))
+            {
+                Console.WriteLine($"O texto digitado não válido. Pressione qualquer tecla para tentar novamente.");
+                Console.ReadLine();
+            }
+            else
+            {
+                valorValidado = true;
             }
         }
         while (!valorValidado);
