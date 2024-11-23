@@ -57,54 +57,16 @@
                     Console.WriteLine("=========================================");
                     Console.WriteLine("                Cadastro                 ");
                     Console.WriteLine("=========================================");
-                    
+
                     Console.Write("Digite o nome do mangá: ");
                     string nome = Console.ReadLine();
 
                     Console.Write("Digite o nome do autor: ");
                     string autor = Console.ReadLine();
+                    
+                    double quantidadeEstoque = SolicitarValorDecimal("Digite a Quantidade de Estoque: ");
 
-                    double quantidadeEstoque = 0;
-                    bool quantidadeCorreta = false;
-
-                    do
-                    {
-                        try
-                        {
-                            Console.Write("Quantidade em estoque: ");
-                            string valorDigitado = Console.ReadLine();
-                            string valorCorreto = valorDigitado.Replace(".", ",");
-                            quantidadeEstoque = Convert.ToDouble(valorCorreto);
-                            quantidadeCorreta = true;
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine($"O quantidade de estoque digitada não é um número válido. Pressione qualquer tecla para continuar.");
-                            Console.ReadLine();
-                        }
-                    }
-                    while (!quantidadeCorreta);
-
-                    double preco = 0;
-                    bool precoCorreto = false;
-
-                    do
-                    {
-                        try
-                        {
-                            Console.Write("Preco: ");
-                            string valorDigitado = Console.ReadLine();
-                            string valorCorreto = valorDigitado.Replace(".", ",");
-                            preco = Convert.ToDouble(valorCorreto);
-                            precoCorreto = true;
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine($"O preco digitado não é um número válido. Pressione qualquer tecla para continuar.");
-                            Console.ReadLine();
-                        }
-                    }
-                    while (!precoCorreto);
+                    double preco = SolicitarValorDecimal("Digite o preço: ");
 
                     Console.WriteLine($"O Mangá {nome} do autor {autor} com quantidade em " +
                         $"estoque {quantidadeEstoque} e preço {preco} foi cadastrado " +
@@ -122,5 +84,31 @@
                     break;
             }
         }
+    }
+
+    private static double SolicitarValorDecimal(string texto)
+    {
+        double valor = 0;
+        bool valorValidado = false;
+
+        do
+        {
+            try
+            {
+                Console.Write(texto);
+                string valorDigitado = Console.ReadLine();
+                string valorCorreto = valorDigitado.Replace(".", ",");
+                valor = Convert.ToDouble(valorCorreto);
+                valorValidado = true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"O valor digitado não é um número decimal válido. Pressione qualquer tecla para tentar novamente.");
+                Console.ReadLine();
+            }
+        }
+        while (!valorValidado);
+
+        return valor;
     }
 }
