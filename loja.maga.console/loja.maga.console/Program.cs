@@ -57,11 +57,22 @@
                     Console.WriteLine("=========================================");
                     Console.WriteLine("                Cadastro                 ");
                     Console.WriteLine("=========================================");
+                    
                     Console.Write("Digite o nome do mangá: ");
                     string nome = Console.ReadLine();
-                    Console.WriteLine($"Mangá {nome} cadastrado como sucesso. Clique para continuar.");
-                    Console.WriteLine(string.Format("Mangá {0} {1} cadastrado como sucesso. Clique para continuar.", nome, 156));
-                    Console.WriteLine("Mangá " + nome + "cadastrado como sucesso. Clique para continuar.");
+
+                    Console.Write("Digite o nome do autor: ");
+                    string autor = Console.ReadLine();
+
+                    Console.Write("Quantidade em estoque: ");
+                    double quantidadeEstoque = Convert.ToDouble(Console.ReadLine());
+
+                    Console.Write("Preço: ");
+                    double preco = Convert.ToDouble(Console.ReadLine());
+
+                    Console.WriteLine($"O Mangá {nome} do autor {autor} com quantidade em " +
+                        $"estoque {quantidadeEstoque} e preço {preco} foi cadastrado " +
+                        $"com sucesso. Pressione qualquer tecla para continuar.");
                     Console.ReadLine();
                     break;
                 case "0":
