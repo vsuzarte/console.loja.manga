@@ -64,8 +64,24 @@
                     Console.Write("Digite o nome do autor: ");
                     string autor = Console.ReadLine();
 
-                    Console.Write("Quantidade em estoque: ");
-                    double quantidadeEstoque = Convert.ToDouble(Console.ReadLine());
+                    double quantidadeEstoque = 0;
+                    bool quantidadeCorreta = false;
+
+                    do
+                    {
+                        try
+                        {
+                            Console.Write("Quantidade em estoque: ");
+                            quantidadeEstoque = Convert.ToDouble(Console.ReadLine());
+                            quantidadeCorreta = true;
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine($"O quantidade de estoque digitada não é um número válido. Pressione qualquer tecla para continuar.");
+                            Console.ReadLine();
+                        }
+                    }
+                    while (!quantidadeCorreta);
 
                     Console.Write("Preço: ");
                     double preco = Convert.ToDouble(Console.ReadLine());
