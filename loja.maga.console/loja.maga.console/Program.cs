@@ -27,6 +27,7 @@
 
                 case "0":
                     Console.WriteLine("Saindo do sistema. Até logo!");
+                    finalizarSistema = true;
                     break;
 
                 default:
