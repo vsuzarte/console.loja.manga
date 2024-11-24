@@ -1,4 +1,6 @@
-﻿using loja.manga.dominio;
+﻿using loja.maga.console;
+using loja.manga.dominio;
+using System;
 
 public class Program
 {
@@ -10,13 +12,9 @@ public class Program
         listaDeMangas.AddRange(PreencherListaDeMangas());
 
         while (!finalizarSistema) {
-            Console.Clear();
-            Console.WriteLine("=========================================");
-            Console.WriteLine("          Bem-vindo à Loja de Mangas     ");
-            Console.WriteLine("=========================================");
-            Console.WriteLine("1. Área Administrativa");
-            Console.WriteLine("0. Sair");
-            Console.WriteLine("=========================================");
+            ConsoleVisualizacao.CriarTituloInicial();
+            ConsoleVisualizacao.CriarMenu(["Área Administrativa", "Sair"]);
+            
             Console.Write("Escolha uma opção: ");
             string opcao = Console.ReadLine() ?? string.Empty;
 
@@ -26,18 +24,13 @@ public class Program
                     MenuAdministrativo();
                     break;
 
-                case "0":
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Saindo do sistema. Até logo!");
-                    Console.WriteLine("=========================================");
+                case "2":
+                    ConsoleVisualizacao.CriarTitulo("Saindo do sistema. Até logo!");
                     finalizarSistema = true;
                     break;
 
                 default:
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Opção inválida! Pressione qualquer tecla para tentar novamente.");
-                    Console.WriteLine("=========================================");
-                    Console.ReadKey();
+                    ConsoleVisualizacao.OpcaoInvalida();
                     break;
             }
         }
@@ -48,75 +41,101 @@ public class Program
         bool finalizarADM = false;
 
         while (!finalizarADM) {
-            Console.Clear();
-            Console.WriteLine("=========================================");
-            Console.WriteLine("          Área Administrativa            ");
-            Console.WriteLine("=========================================");
-            Console.WriteLine("1. Cadastrar Mangás");
-            Console.WriteLine("2. Listar Mangás");
-            Console.WriteLine("0. Sair");
+            ConsoleVisualizacao.CriarTitulo("Área Administrativa");
+            ConsoleVisualizacao.CriarMenu(["Cadastrar Mangás", "Listar Mangás", "Buscar Mangás", "Sair"]);
+
             Console.Write("Escolha uma opção: ");
             string opcao = Console.ReadLine() ?? string.Empty;
 
             switch (opcao)
             {
                 case "1":
-                    Console.Clear();
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("                Cadastro                 ");
-                    Console.WriteLine("=========================================");
-
-                    var manga = new Manga();
-
-                    manga.Id = listaDeMangas.Count + 1;
-                    manga.Nome = SolicitarValorTextual("Digite o nome do mangá: ");
-                    manga.Autor = SolicitarValorTextual("Digite o nome do autor: ");
-                    manga.QuantidadeEstoque = SolicitarValorInteiro("Digite a Quantidade de Estoque: ");
-                    manga.ValorUnitario = SolicitarValorDecimal("Digite o valor unitário: ");
-                    
-                    listaDeMangas.Add(manga);
-
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Mangá Cadastradrado com sucesso");
-                    Console.WriteLine(manga.ImprimirVariasLinhas());
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Pressione qualquer tecla para continuar.");
-                    Console.ReadLine();
-                    
+                    CadastrasMagana();
                     break;
+
                 case "2":
                     ListarMangas();
                     break;
-                case "0":
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Saindo da Área Administrativa.");
-                    Console.WriteLine("=========================================");
+
+                case "3":
+                    BuscarMangas();
+                    break;
+
+                case "4":
+                    ConsoleVisualizacao.CriarTitulo("Saindo da Área Administrativa.");
                     finalizarADM = true;
                     break;
 
                 default:
-                    Console.WriteLine("=========================================");
-                    Console.WriteLine("Opção inválida! Pressione qualquer tecla para tentar novamente.");
-                    Console.WriteLine("=========================================");
-                    Console.ReadKey();
+                    ConsoleVisualizacao.OpcaoInvalida();
                     break;
             }
         }
     }
 
+    private static void BuscarMangas()
+    {
+        bool finalizarBusca = false;
+
+        while (!finalizarBusca)
+        {
+            ConsoleVisualizacao.CriarTitulo("Buscar Mangás");
+            ConsoleVisualizacao.CriarMenu(["Buscar por Id", "Buscar por Nome", "Buscar por Autor", "Sair"]);
+
+            Console.Write("Escolha uma opção: ");
+            string opcao = Console.ReadLine() ?? string.Empty;
+
+            switch (opcao)
+            {
+                case "1":
+                    BuscarMangaPorId();
+                    break;
+
+                case "2":
+                    BuscarMangaPorNome();
+                    break;
+
+                case "3":
+                    BuscarMangaPorAutor();
+                    break;
+
+                case "4":
+                    ConsoleVisualizacao.CriarTitulo("Buscar por Id");
+                    finalizarBusca = true;
+                    break;
+
+                default:
+                    ConsoleVisualizacao.OpcaoInvalida();
+                    break;
+            }
+        }
+    }
+
+    private static void CadastrasMagana()
+    {
+        ConsoleVisualizacao.CriarTitulo("Cadastras Mangá");
+
+        var manga = new Manga();
+
+        manga.Id = listaDeMangas.Count + 1;
+
+        manga.Nome = ConsoleVisualizacao.SolicitarValorTextual("Digite o nome do mangá: ");
+        manga.Autor = ConsoleVisualizacao.SolicitarValorTextual("Digite o nome do autor: ");
+        manga.QuantidadeEstoque = ConsoleVisualizacao.SolicitarValorInteiro("Digite a Quantidade de Estoque: ");
+        manga.ValorUnitario = ConsoleVisualizacao.SolicitarValorDecimal("Digite o valor unitário: ");
+
+        listaDeMangas.Add(manga);
+
+        ConsoleVisualizacao.CriarAlerta($"{manga.ImprimirVariasLinhas()}\n" +
+                                        $"Pressione qualquer tecla para continuar.");
+    }
+
     private static void ListarMangas()
     {
-        Console.Clear();
-        Console.WriteLine("=========================================");
-        Console.WriteLine("           Lista de Mangás               ");
-        Console.WriteLine("=========================================");
+        ConsoleVisualizacao.CriarTitulo("Lista de Mangás");
 
         if (listaDeMangas.Count == 0)
-        {
-            Console.WriteLine("=========================================");
-            Console.WriteLine("Nenhum mangá cadastrado.");
-            Console.WriteLine("=========================================");
-        }
+            ConsoleVisualizacao.CriarAlerta("Nenhum mangá cadastrado.");
         else
         {
             foreach (var manga in listaDeMangas)
@@ -124,92 +143,56 @@ public class Program
                 Console.WriteLine(manga.ImprimirEmLinha());
             }
         }
-        Console.WriteLine("=========================================");
-        Console.WriteLine("Pressione qualquer tecla para voltar.");
-        Console.WriteLine("=========================================");
-        Console.ReadKey();
+        ConsoleVisualizacao.CriarAlerta("Pressione qualquer tecla para voltar.");
     }
 
-    private static double SolicitarValorDecimal(string texto)
+    private static void BuscarMangaPorId()
     {
-        double valor = 0;
-        bool valorValidado = false;
+        ConsoleVisualizacao.CriarTitulo("Buscar por Id");
 
-        do
-        {
-            try
-            {
-                Console.Write(texto);
-                string valorDigitado = Console.ReadLine() ?? string.Empty;
-                string valorCorreto = valorDigitado.Replace(".", ",");
-                valor = Convert.ToDouble(valorCorreto);
-                valorValidado = true;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("=========================================");
-                Console.WriteLine($"O valor digitado não é um número decimal válido. Pressione qualquer tecla para tentar novamente.");
-                Console.WriteLine("=========================================");
-                Console.ReadLine();
-            }
-        }
-        while (!valorValidado);
-
-        return valor;
+        int id = ConsoleVisualizacao.SolicitarValorInteiro("Digite o id: ");
+        var manga = listaDeMangas.Find(m => m.Id == id);
+        MostrarResultadoBusca(manga);
     }
 
-    private static int SolicitarValorInteiro(string texto)
+    private static void BuscarMangaPorNome()
     {
-        int valor = 0;
-        bool valorValidado = false;
+        ConsoleVisualizacao.CriarTitulo("Buscar por Nome");
 
-        do
-        {
-            try
-            {
-                Console.Write(texto);
-                string valorDigitado = Console.ReadLine() ?? string.Empty;
-                valor = Convert.ToInt32(valorDigitado);
-                valorValidado = true;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("=========================================");
-                Console.WriteLine($"O valor digitado não é um número inteiro válido. Pressione qualquer tecla para tentar novamente.");
-                Console.WriteLine("=========================================");
-                Console.ReadLine();
-            }
-        }
-        while (!valorValidado);
+        string nome = ConsoleVisualizacao.SolicitarValorTextual("Digite o nome: ");
+        var manga = listaDeMangas.FindAll(m => m.Nome.ToLower().Contains(nome.ToLower()));
 
-        return valor;
+        MostrarResultadoBusca(manga);
     }
 
-    private static string SolicitarValorTextual(string texto)
+    private static void BuscarMangaPorAutor()
     {
-        bool valorValidado = false;
-        string valor = "";
+        ConsoleVisualizacao.CriarTitulo("Buscar por Autor");
 
-        do
-        {
-            Console.Write(texto);
-            valor = Console.ReadLine() ?? string.Empty;
+        string autor = ConsoleVisualizacao.SolicitarValorTextual("Digite o autor: ");
+        var manga = listaDeMangas.FindAll(m => m.Autor.ToLower().Contains(autor.ToLower()));
 
-            if (string.IsNullOrEmpty(valor))
-            {
-                Console.WriteLine("=========================================");
-                Console.WriteLine($"O texto digitado não válido. Pressione qualquer tecla para tentar novamente.");
-                Console.WriteLine("=========================================");
-                Console.ReadLine();
-            }
-            else
-            {
-                valorValidado = true;
-            }
-        }
-        while (!valorValidado);
+        MostrarResultadoBusca(manga);
+    }
 
-        return valor;
+    private static void MostrarResultadoBusca(Manga? manga)
+    {
+        if (manga is null)
+            ConsoleVisualizacao.CriarAlerta($"Não foi possivel encontrar o mangá.\n" +
+                                            $"Pressione qualquer tecla para fazer outra busca.");
+        else
+            ConsoleVisualizacao.CriarAlerta($"{manga.ImprimirVariasLinhas()}\n" +
+                                            $"Pressione qualquer tecla para fazer outra busca.");
+    }
+
+    private static void MostrarResultadoBusca(List<Manga> mangas)
+    {
+        if (mangas.Count == 1)
+            MostrarResultadoBusca(mangas.FirstOrDefault());
+        else
+            mangas.ForEach(manga => Console.WriteLine(manga.ImprimirEmLinha()));
+
+        ConsoleVisualizacao.CriarAlerta("Pressione qualquer tecla para voltar.");
     }
 
     public static List<Manga> PreencherListaDeMangas()
