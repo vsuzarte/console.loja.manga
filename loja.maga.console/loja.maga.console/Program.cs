@@ -1,7 +1,9 @@
-﻿using System.Drawing;
+﻿using loja.manga.dominio;
 
 public class Program
 {
+    private static List<Manga> listaDeMangas = new List<Manga>();
+
     private static void Main(string[] args)
     {
         bool finalizarSistema = false;
@@ -24,12 +26,16 @@ public class Program
                     break;
 
                 case "0":
+                    Console.WriteLine("=========================================");
                     Console.WriteLine("Saindo do sistema. Até logo!");
+                    Console.WriteLine("=========================================");
                     finalizarSistema = true;
                     break;
 
                 default:
+                    Console.WriteLine("=========================================");
                     Console.WriteLine("Opção inválida! Pressione qualquer tecla para tentar novamente.");
+                    Console.WriteLine("=========================================");
                     Console.ReadKey();
                     break;
             }
@@ -45,9 +51,9 @@ public class Program
             Console.WriteLine("=========================================");
             Console.WriteLine("          Área Administrativa            ");
             Console.WriteLine("=========================================");
-            Console.WriteLine("1. Cadastrar Mangá");
+            Console.WriteLine("1. Cadastrar Mangás");
+            Console.WriteLine("2. Listar Mangás");
             Console.WriteLine("0. Sair");
-            Console.WriteLine("=========================================");
             Console.Write("Escolha uma opção: ");
             string opcao = Console.ReadLine() ?? string.Empty;
 
@@ -59,30 +65,67 @@ public class Program
                     Console.WriteLine("                Cadastro                 ");
                     Console.WriteLine("=========================================");
 
-                    string nome = SolicitarValorTextual("Digite o nome do mangá: ");
+                    var manga = new Manga();
+                    
+                    manga.Nome = SolicitarValorTextual("Digite o nome do mangá: ");
+                    manga.Autor = SolicitarValorTextual("Digite o nome do autor: ");
+                    manga.QuantidadeEstoque = SolicitarValorInteiro("Digite a Quantidade de Estoque: ");
+                    manga.ValorUnitario = SolicitarValorDecimal("Digite o valor unitário: ");
+                    
+                    listaDeMangas.Add(manga);
 
-                    string autor = SolicitarValorTextual("Digite o nome do autor: ");
-
-                    double quantidadeEstoque = SolicitarValorDecimal("Digite a Quantidade de Estoque: ");
-
-                    double preco = SolicitarValorDecimal("Digite o preço: ");
-
-                    Console.WriteLine($"O Mangá {nome} do autor {autor} com quantidade em " +
-                        $"estoque {quantidadeEstoque} e preço {preco} foi cadastrado " +
-                        $"com sucesso. Pressione qualquer tecla para continuar.");
+                    Console.WriteLine("=========================================");
+                    Console.WriteLine("Mangá Cadastradrado com sucesso");
+                    Console.WriteLine(manga.ImprimirVariasLinhas());
+                    Console.WriteLine("=========================================");
+                    Console.WriteLine("Pressione qualquer tecla para continuar.");
                     Console.ReadLine();
+                    
+                    break;
+                case "2":
+                    ListarMangas();
                     break;
                 case "0":
+                    Console.WriteLine("=========================================");
                     Console.WriteLine("Saindo da Área Administrativa.");
+                    Console.WriteLine("=========================================");
                     finalizarADM = true;
                     break;
 
                 default:
+                    Console.WriteLine("=========================================");
                     Console.WriteLine("Opção inválida! Pressione qualquer tecla para tentar novamente.");
+                    Console.WriteLine("=========================================");
                     Console.ReadKey();
                     break;
             }
         }
+    }
+
+    private static void ListarMangas()
+    {
+        Console.Clear();
+        Console.WriteLine("=========================================");
+        Console.WriteLine("           Lista de Mangás               ");
+        Console.WriteLine("=========================================");
+
+        if (listaDeMangas.Count == 0)
+        {
+            Console.WriteLine("=========================================");
+            Console.WriteLine("Nenhum mangá cadastrado.");
+            Console.WriteLine("=========================================");
+        }
+        else
+        {
+            foreach (var manga in listaDeMangas)
+            {
+                Console.WriteLine(manga.ImprimirEmLinha());
+            }
+        }
+        Console.WriteLine("=========================================");
+        Console.WriteLine("Pressione qualquer tecla para voltar.");
+        Console.WriteLine("=========================================");
+        Console.ReadKey();
     }
 
     private static double SolicitarValorDecimal(string texto)
@@ -102,7 +145,36 @@ public class Program
             }
             catch (Exception)
             {
+                Console.WriteLine("=========================================");
                 Console.WriteLine($"O valor digitado não é um número decimal válido. Pressione qualquer tecla para tentar novamente.");
+                Console.WriteLine("=========================================");
+                Console.ReadLine();
+            }
+        }
+        while (!valorValidado);
+
+        return valor;
+    }
+
+    private static int SolicitarValorInteiro(string texto)
+    {
+        int valor = 0;
+        bool valorValidado = false;
+
+        do
+        {
+            try
+            {
+                Console.Write(texto);
+                string valorDigitado = Console.ReadLine() ?? string.Empty;
+                valor = Convert.ToInt32(valorDigitado);
+                valorValidado = true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("=========================================");
+                Console.WriteLine($"O valor digitado não é um número inteiro válido. Pressione qualquer tecla para tentar novamente.");
+                Console.WriteLine("=========================================");
                 Console.ReadLine();
             }
         }
@@ -123,7 +195,9 @@ public class Program
 
             if (string.IsNullOrEmpty(valor))
             {
+                Console.WriteLine("=========================================");
                 Console.WriteLine($"O texto digitado não válido. Pressione qualquer tecla para tentar novamente.");
+                Console.WriteLine("=========================================");
                 Console.ReadLine();
             }
             else
