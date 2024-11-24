@@ -7,6 +7,7 @@ public class Program
     private static void Main(string[] args)
     {
         bool finalizarSistema = false;
+        listaDeMangas.AddRange(PreencherListaDeMangas());
 
         while (!finalizarSistema) {
             Console.Clear();
@@ -66,7 +67,8 @@ public class Program
                     Console.WriteLine("=========================================");
 
                     var manga = new Manga();
-                    
+
+                    manga.Id = listaDeMangas.Count + 1;
                     manga.Nome = SolicitarValorTextual("Digite o nome do mangá: ");
                     manga.Autor = SolicitarValorTextual("Digite o nome do autor: ");
                     manga.QuantidadeEstoque = SolicitarValorInteiro("Digite a Quantidade de Estoque: ");
@@ -208,5 +210,17 @@ public class Program
         while (!valorValidado);
 
         return valor;
+    }
+
+    public static List<Manga> PreencherListaDeMangas()
+    {
+        return new List<Manga>
+        {
+            new() { Id = 1, Nome = "Naruto", Autor = "Masashi Kishimoto", QuantidadeEstoque = 15, ValorUnitario = 29.90 },
+            new() { Id = 2, Nome = "One Piece", Autor = "Eiichiro Oda", QuantidadeEstoque = 10, ValorUnitario = 32.90 },
+            new() { Id = 3, Nome = "Attack on Titan", Autor = "Hajime Isayama", QuantidadeEstoque = 8, ValorUnitario = 34.50 },
+            new() { Id = 4, Nome = "Dragon Ball", Autor = "Akira Toriyama", QuantidadeEstoque = 20, ValorUnitario = 28.90 },
+            new() { Id = 5, Nome = "Demon Slayer", Autor = "Koyoharu Gotouge", QuantidadeEstoque = 12, ValorUnitario = 30.90 }
+        };
     }
 }
