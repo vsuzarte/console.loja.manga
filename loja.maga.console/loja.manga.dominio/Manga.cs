@@ -12,6 +12,8 @@
 
         public double ValorUnitario { get; set; }
 
+        public bool Desativado { get; set; }
+
         public string ImprimirEmLinha()
         {
             return $"Id: {Id}, Nome: {Nome}, Autor: {Autor}, Quantidade em Estoque: {QuantidadeEstoque}, Valor Unitário: {ValorUnitario:C}";

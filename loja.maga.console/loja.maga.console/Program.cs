@@ -66,7 +66,7 @@ public class Program
                     break;
 
                 case "5":
-                    //ExcluirMangas();
+                    ExcluirMangas();
                     break;
 
                 case "6":
@@ -146,7 +146,7 @@ public class Program
             ConsoleVisualizacao.CriarAlerta("Nenhum mangá cadastrado.");
         else
         {
-            foreach (var manga in listaDeMangas)
+            foreach (var manga in listaDeMangas.Where(m => !m.Desativado).ToList())
             {
                 Console.WriteLine(manga.ImprimirEmLinha());
             }
@@ -158,6 +158,55 @@ public class Program
 
     public static void EditarMangas()
     {
+        Manga? manga = SolicarIdParaBuscarManga();
+
+        if (manga is not null)
+        {
+            manga.Nome = ConsoleVisualizacao.SolicitarValorTextual($"Digite o nome ({manga.Nome}): ");
+            manga.Autor = ConsoleVisualizacao.SolicitarValorTextual($"Digite autor ({manga.Autor}): ");
+            manga.ValorUnitario = ConsoleVisualizacao.SolicitarValorDecimal($"Digite o valor unitário ({manga.ValorUnitario}): ");
+        }
+    }
+
+    public static void ExcluirMangas()
+    {
+        Manga? manga = SolicarIdParaBuscarManga();
+
+
+        if (manga is not null)
+        {
+            bool finalizarExclusao = false;
+
+            while (!finalizarExclusao)
+            {
+                Console.WriteLine($"Deseja mesmo excluir o mangá: {manga.Nome}");
+                Console.Write($"Digite uma opção: Sim (s) / Não (n) :  ");
+                string opcao = Console.ReadLine() ?? string.Empty;
+
+                switch (opcao.ToLower())
+                {
+                    case "s":
+                        manga.Desativado = true;
+                        ConsoleVisualizacao.CriarAlerta("Mangá desativado. Pressione qualquer tecla para voltar.");
+                        finalizarExclusao = true;
+                        break;
+
+                    case "n":
+                        ConsoleVisualizacao.CriarAlerta("Operação cancelada. Pressione qualquer tecla para voltar.");
+                        finalizarExclusao = true;
+                        break;
+
+                    default:
+                        ConsoleVisualizacao.OpcaoInvalida();
+                        break;
+                }
+            }
+        }
+    }
+        
+
+    public static Manga? SolicarIdParaBuscarManga()
+    {
         bool escolheuManga = false;
         Manga? manga = null;
 
@@ -167,7 +216,7 @@ public class Program
             ListarMangas(emEdicao: true);
             int id = ConsoleVisualizacao.SolicitarValorInteiro("Digite o Id do mangá que deseja editar: ");
 
-            manga = listaDeMangas.Find(manga => manga.Id == id);
+            manga = listaDeMangas.Find(manga => manga.Id == id && !manga.Desativado);
 
             if (manga is null)
                 ConsoleVisualizacao.CriarAlerta("Id digitado não existe. Pressione para tentar novamente.");
@@ -176,12 +225,7 @@ public class Program
         }
         while (!escolheuManga);
 
-        if(manga is not null)
-        {
-            manga.Nome = ConsoleVisualizacao.SolicitarValorTextual($"Digite o nome ({manga.Nome}): ");
-            manga.Autor = ConsoleVisualizacao.SolicitarValorTextual($"Digite autor ({manga.Autor}): ");
-            manga.ValorUnitario = ConsoleVisualizacao.SolicitarValorDecimal($"Digite o valor unitário ({manga.ValorUnitario}): ");
-        }
+        return manga;
     }
 
     private static void BuscarMangaPorId()
@@ -189,7 +233,7 @@ public class Program
         ConsoleVisualizacao.CriarTitulo("Buscar por Id");
 
         int id = ConsoleVisualizacao.SolicitarValorInteiro("Digite o id: ");
-        var manga = listaDeMangas.Find(m => m.Id == id);
+        var manga = listaDeMangas.Find(m => m.Id == id && !m.Desativado);
         MostrarResultadoBusca(manga);
     }
 
@@ -198,7 +242,7 @@ public class Program
         ConsoleVisualizacao.CriarTitulo("Buscar por Nome");
 
         string nome = ConsoleVisualizacao.SolicitarValorTextual("Digite o nome: ");
-        var manga = listaDeMangas.FindAll(m => m.Nome.ToLower().Contains(nome.ToLower()));
+        var manga = listaDeMangas.FindAll(m => m.Nome.ToLower().Contains(nome.ToLower()) && !m.Desativado);
 
         MostrarResultadoBusca(manga);
     }
@@ -208,7 +252,7 @@ public class Program
         ConsoleVisualizacao.CriarTitulo("Buscar por Autor");
 
         string autor = ConsoleVisualizacao.SolicitarValorTextual("Digite o autor: ");
-        var manga = listaDeMangas.FindAll(m => m.Autor.ToLower().Contains(autor.ToLower()));
+        var manga = listaDeMangas.FindAll(m => m.Autor.ToLower().Contains(autor.ToLower()) && !m.Desativado);
 
         MostrarResultadoBusca(manga);
     }
