@@ -42,7 +42,7 @@ public class Program
 
         while (!finalizarADM) {
             ConsoleVisualizacao.CriarTitulo("Área Administrativa");
-            ConsoleVisualizacao.CriarMenu(["Cadastrar Mangás", "Listar Mangás", "Buscar Mangás", "Sair"]);
+            ConsoleVisualizacao.CriarMenu(["Cadastrar Mangás", "Listar Mangás", "Buscar Mangás", "Editar", "Excluir", "Sair"]);
 
             Console.Write("Escolha uma opção: ");
             string opcao = Console.ReadLine() ?? string.Empty;
@@ -62,6 +62,14 @@ public class Program
                     break;
 
                 case "4":
+                    EditarMangas();
+                    break;
+
+                case "5":
+                    //ExcluirMangas();
+                    break;
+
+                case "6":
                     ConsoleVisualizacao.CriarTitulo("Saindo da Área Administrativa.");
                     finalizarADM = true;
                     break;
@@ -130,7 +138,7 @@ public class Program
                                         $"Pressione qualquer tecla para continuar.");
     }
 
-    private static void ListarMangas()
+    private static void ListarMangas(bool emEdicao = false)
     {
         ConsoleVisualizacao.CriarTitulo("Lista de Mangás");
 
@@ -143,7 +151,37 @@ public class Program
                 Console.WriteLine(manga.ImprimirEmLinha());
             }
         }
-        ConsoleVisualizacao.CriarAlerta("Pressione qualquer tecla para voltar.");
+
+        if(!emEdicao)
+            ConsoleVisualizacao.CriarAlerta("Pressione qualquer tecla para voltar.");
+    }
+
+    public static void EditarMangas()
+    {
+        bool escolheuManga = false;
+        Manga? manga = null;
+
+        do
+        {
+            ConsoleVisualizacao.CriarTitulo("Editar Mangás");
+            ListarMangas(emEdicao: true);
+            int id = ConsoleVisualizacao.SolicitarValorInteiro("Digite o Id do mangá que deseja editar: ");
+
+            manga = listaDeMangas.Find(manga => manga.Id == id);
+
+            if (manga is null)
+                ConsoleVisualizacao.CriarAlerta("Id digitado não existe. Pressione para tentar novamente.");
+            else
+                escolheuManga = true;
+        }
+        while (!escolheuManga);
+
+        if(manga is not null)
+        {
+            manga.Nome = ConsoleVisualizacao.SolicitarValorTextual($"Digite o nome ({manga.Nome}): ");
+            manga.Autor = ConsoleVisualizacao.SolicitarValorTextual($"Digite autor ({manga.Autor}): ");
+            manga.ValorUnitario = ConsoleVisualizacao.SolicitarValorDecimal($"Digite o valor unitário ({manga.ValorUnitario}): ");
+        }
     }
 
     private static void BuscarMangaPorId()

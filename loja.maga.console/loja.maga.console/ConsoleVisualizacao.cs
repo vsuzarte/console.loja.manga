@@ -4,7 +4,7 @@
     {
         public static void CriarTituloInicial()
         {
-            Console.WriteLine("###                  ##                        ###");
+            Console.WriteLine("###                  ##                        ###                                                             ##");
             Console.WriteLine(" ##                                             ##");
             Console.WriteLine(" ##      ####       ###    #####                ##   ######            ##   ##    ####    #####   ######     ####");
             Console.WriteLine(" ##     ##  ##       ##       ##             #####   ##  ##            #######      ##   ##  ##   ##  ##       ##");
@@ -19,7 +19,7 @@
         {
             Console.Clear();
             CriarDivisor();
-            Console.WriteLine($"          {titulo}          ");
+            Console.WriteLine($"{titulo}");
             CriarDivisor();
         }
 
@@ -125,7 +125,5 @@
         }
 
         private static void CriarDivisor() => Console.WriteLine(new string('=', 40));
-
-
     }
 }
